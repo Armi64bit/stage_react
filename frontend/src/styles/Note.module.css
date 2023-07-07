@@ -1,0 +1,24 @@
+.noteCard{
+  background-color: cornsilk;
+  position: relative;
+  }
+  .cardText{
+      white-space: pre-line;
+      margin-bottom: 20px;
+  }
+  .cardBody {
+      overflow: hidden;
+      mask-image: linear-gradient(180deg, #000 60%, transparent);
+  }
+  .crossedOut {
+      text-decoration: line-through;
+    }
+    .checkboxContainer {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+    .greyedOut {
+      opacity: 0.6;
+    }
+    
