@@ -18,6 +18,7 @@ const TodoList: React.FC = () => {
     }
   }, []);
 
+  //event hadnlers
   const createNewTodo = () => {
     const item: Todo = {
       id: new Date().getTime(),
@@ -43,13 +44,13 @@ const TodoList: React.FC = () => {
     setTodos(updatedTodos);
   };
 
-  const handleInputBlur = (item: Todo) => {
-    const updatedTodos = todos.map((todo) =>
-      todo.id === item.id ? { ...todo, complete: false } : todo
-    );
-    setTodos(updatedTodos);
-    save(updatedTodos);
-  };
+  // const handleInputBlur = (item: Todo) => {
+  //   const updatedTodos = todos.map((todo) =>
+  //     todo.id === item.id ? { ...todo, complete: false } : todo
+  //   );
+  //   setTodos(updatedTodos);
+  //   save(updatedTodos);
+  // };
 
   const handleEditButtonClick = (item: Todo) => {
     const updatedTodos = todos.map((todo) =>
@@ -83,7 +84,7 @@ const TodoList: React.FC = () => {
         value={item.text}
         disabled={item.complete}
         onChange={(e) => handleInputChange(e, item)}
-        onBlur={() => handleInputBlur(item)}
+        // onBlur={() => handleInputBlur(item)}
       />
     );
 

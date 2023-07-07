@@ -1,120 +1,114 @@
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 
-	font-family: sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-button {
-	appearance: none;
-	background: none;
-	outline: none;
-	border: none;
-
-	cursor: pointer;
+html {
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
+    color: #fff;
 }
 
 body {
-	background-color: #242948;
-	color: #fff;
+    min-height: 100vh;
+    background-color: dodgerblue;
 }
 
-main {
-	min-height: 100vh;
-	display: flex;
-	justify-content: center;
-	padding: 2rem 1.5rem;
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+  padding: 1rem 0.5rem;
 }
 
-.app {
-	width: 100%;
-	max-width: 768px;
+section {
+    width: 100%;
+    max-width: 420px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1rem;
+    background-color: rgba(0,0,0,0.4);
 }
 
-.app header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 1rem;
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-grow: 1;
+    padding-bottom: 1rem;
 }
 
-.app header h1 {
-	color: #fff;
-	font-size: 24px;
-	font-weight: 400;
+a, a:visited {
+    color: #fff;
 }
 
-.app header button {
-	color: #fff;
-	font-size: 18px;
-	border-bottom: 2px solid #fff;
-	text-transform: uppercase;
+input[type="text"],
+input[type="password"],
+button,
+textarea {
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
 }
 
-.item {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 1.5rem;
-	border-radius: 1rem;
-	background-color: #1e223d;
-	box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-	margin-bottom: 1.5rem;
+label,
+button {
+  margin-top: 1rem;
 }
 
-.item:last-of-type {
-	margin-bottom: 0;
+button {
+  padding: 0.5rem;
 }
 
-.item input[type="checkbox"] {
-	margin-right: 1rem;
+.instructions {
+    font-size: 0.75rem;
+    border-radius: 0.5rem;
+    background: #000;
+    color: #fff;
+    padding: 0.25rem;
+    position: relative;
+    bottom: -10px;
 }
 
-.item input[type="text"] {
-	appearance: none;
-	background: none;
-	border: none;
-	outline: none;
-	font-weight: 400;
-	color: #fff;
-	font-size: 20px;
-	flex: 1 1 0%;
-	margin-right: 1rem;
+.instructions > svg {
+    margin-right: 0.25rem;
 }
 
-.item input[type="text"]:not(:disabled) {
-	border-bottom: 2px solid #fff;
+.offscreen {
+    position: absolute;
+    left: -9999px;
 }
 
-.item.complete {
-	opacity: 0.7;
+.hide {
+    display: none;
 }
 
-.item.complete input[type="text"] {
-	text-decoration: line-through;
+.valid {
+    color: limegreen;
+    margin-left: 0.25rem;
 }
 
-.item:hover,
-.item:focus-within {
-	outline: 2px solid #fff;
+.invalid {
+    color: red;
+    margin-left: 0.25rem;
 }
 
-.actions button {
-	color: #CCC;
-	margin-right: 1rem;
-	opacity: 0.8;
-	transform: 0.1s;
+.errmsg {
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
-.actions button.remove-btn {
-	color: crimson;
-}
-
-.actions button:hover {
-	opacity: 1;
-}
-
-.actions button:last-of-type {
-	margin-right: 0;
+.line {
+    display: inline-block;
 }

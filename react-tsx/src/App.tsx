@@ -1,12 +1,16 @@
 import './App.css';
 import TodoList from './components/TodoList';
 import TodoApp from './components/TodoList';
-
+import Home from './components/page';
+import Register from './components/Register';
 
 function App() {
   return (
     <div className="App">
-      <TodoList />
+     <Register/>
+      {/* <div>
+      <TodoList /></div>
+    <Home/> */}
     </div>
   );
 }
