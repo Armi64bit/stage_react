@@ -49,7 +49,7 @@ const submit = async (e: React.SyntheticEvent) => {
   }
 };
 
-return ( <div >
+return ( <div className='form-signin w-100 m-auto'>
         <form  onSubmit={submit}>
         <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
     

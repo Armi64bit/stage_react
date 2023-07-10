@@ -43,7 +43,7 @@ const Register: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleRegister}>
+    <form className='form-signin w-100 m-auto' onSubmit={handleRegister}>
       <h1 className="h3 mb-3 fw-normal">Please Sign up</h1>
 
       <div className="form-floating">
