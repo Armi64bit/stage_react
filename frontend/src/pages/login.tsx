@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -9,22 +10,44 @@ const Login = () => {
 
   const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
-  
-const submit= async(e:React.SyntheticEvent)=>{
+const [loginError, setLoginError] = useState('');
+const navigate = useNavigate();
+
+const submit = async (e: React.SyntheticEvent) => {
   e.preventDefault();
 
-
-await fetch('http://localhost:8000/api/login',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    credentials:'include', //to send cookies to the backend
-    body:JSON.stringify({
-        
+  try {
+    const response = await fetch('http://localhost:5000/api/users/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
         email,
         password
-    }),
-})
-}
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const token = data.token; // Assuming the API returns a token in the response
+
+      // Store the token in localStorage or any other secure storage
+      localStorage.setItem('token', token);
+
+      // Redirect to the desired page or perform any other action
+      console.log("Redirecting to /home");
+
+      navigate('/home');
+
+    } else {
+      const errorData = await response.json();
+      setLoginError(errorData.message);
+    }
+  } catch (error) {
+    console.log(error);
+    setLoginError('An error occurred during login');
+  }
+};
 
 return ( <div >
         <form  onSubmit={submit}>

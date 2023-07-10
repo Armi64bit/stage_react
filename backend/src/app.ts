@@ -14,8 +14,10 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 // Enable CORS
-app.use(cors());
-
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 // Endpoints
 app.use("/api/users", UserRoutes);
 app.use("/api/notes", notesRoutes);

@@ -93,3 +93,18 @@ export const login: RequestHandler<unknown, unknown, LoginBody> = async (req, re
     }
   };
   
+  export const getUserByUsername: RequestHandler = async (req, res, next) => {
+    const username = req.params.username;
+  
+    try {
+      const user = await UserModel.findOne({ username }).exec();
+  
+      if (!user) {
+        throw createHttpError(404, "User not found");
+      }
+  
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  };
