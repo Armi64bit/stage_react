@@ -59,39 +59,35 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody> = async (req, 
 };
 
 export const login: RequestHandler<unknown, unknown, LoginBody> = async (req, res, next) => {
-    const email = req.body.email;
-    const password = req.body.password;
-  
-    try {
-      if (!email || !password) {
-        throw createHttpError(400, "Missing email or password");
-      }
-  
-      const user = await UserModel.findOne({ email }).exec();
-      if (!user) {
-        throw createHttpError(401, "Invalid email or password");
-      }
-  
-      console.log('Password:', password);
-      console.log('User Password:', user.password);
-  
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        throw createHttpError(401, "Invalid email or password");
-      }
-  
-      // Generate access token
-      const accessToken = generateToken({ userId: user._id }, '15m');
-  
-      // Generate refresh token
-      const refreshToken = generateToken({ userId: user._id }, '7d');
-  
-      res.json({ user, tokens: { accessToken, refreshToken } });
-    } catch (error) {
-      console.error(error);
-      next(error);
+  const email = req.body.email;
+  const password = req.body.password;
+  try {
+    if (!email || !password) {
+      throw new createHttpError.BadRequest("Missing email or password");
     }
-  };
+
+    const user = await UserModel.findOne({ email }).exec();
+    if (!user) {
+      throw new createHttpError.Unauthorized("Invalid email or password");
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new createHttpError.Unauthorized("Invalid email or password");
+    }
+
+    // Generate access token
+    const accessToken = generateToken({ userId: user._id }, '15m');
+
+    // Generate refresh token
+    const refreshToken = generateToken({ userId: user._id }, '7d');
+
+    res.json({ user, tokens: { accessToken, refreshToken } });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
   
   export const getUserByUsername: RequestHandler = async (req, res, next) => {
     const username = req.params.username;

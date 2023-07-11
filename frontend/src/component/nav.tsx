@@ -66,6 +66,11 @@ const Nav = () => {
           <ul className="navbar-nav ml-auto">
             {isLoggedIn ? (
               <>
+               <li className="nav-item">
+                  <Link className="nav-link" to="/notes">
+                    Notes{" "}
+                  </Link>
+                </li>
                 <li className="nav-item">
                   <span className="nav-link">Logged in as {username}</span>
                 </li>
@@ -80,11 +85,6 @@ const Nav = () => {
               </>
             ) : (
               <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/notes">
-                    Notes{" "}
-                  </Link>
-                </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/login">
                     Log in

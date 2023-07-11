@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-
+import Alert from 'react-bootstrap/Alert';
 interface RegisterFormData {
   username: string;
   email: string;
   password: string;
+}
+
+interface ErrorResponse {
+  error: string;
 }
 
 const Register: React.FC = () => {
@@ -15,6 +18,7 @@ const Register: React.FC = () => {
     email: '',
     password: '',
   });
+  const [registerError, setRegisterError] = useState('');
   const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -27,11 +31,22 @@ const Register: React.FC = () => {
       );
 
       // Handle successful registration
-      console.log(response.data); 
+      console.log(response.data);
       navigate('/login');
-        } catch (error) {
+    } catch (error) {
       // Handle registration error
       console.error(error);
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<ErrorResponse>;
+        if (axiosError.response && axiosError.response.data) {
+          const errorData = axiosError.response.data;
+          setRegisterError(errorData.error);
+        } else {
+          setRegisterError('An error occurred during registration');
+        }
+      } else {
+        setRegisterError('An error occurred during registration');
+      }
     }
   };
 
@@ -44,8 +59,15 @@ const Register: React.FC = () => {
 
   return (
     <form className='form-signin w-100 m-auto' onSubmit={handleRegister}>
-      <h1 className="h3 mb-3 fw-normal">Please Sign up</h1>
-
+      {/* <h1 className=" h3 mb-3 fw-normal">Please Sign up</h1> */}
+      <div className="patterns">
+  <svg width="100%" height="100%">
+  
+ <text x="50%" y="60%"  text-anchor="middle"  >
+   Sign Up
+ </text>
+ </svg>
+</div>
       <div className="form-floating">
         <input
           type="text"
@@ -84,6 +106,8 @@ const Register: React.FC = () => {
         />
         <label htmlFor="floatingPassword">Password</label>
       </div>
+
+      {registerError && <Alert variant="danger">{registerError}</Alert>}
 
       <button className="w-100 btn btn-lg btn-primary" type="submit">
         Sign up
