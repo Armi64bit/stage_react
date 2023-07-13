@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,29 +13,26 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/api/users/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          email,
-          password
-        }),
+      const response = await axios.post('http://localhost:5000/api/users/login', {
+        email,
+        password
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        const token = data.token;
+      if (response.status === 200) {
+        const data = response.data;
+        const token = data.tokens.accessToken;
 
         // Store the token in localStorage or any other secure storage
         localStorage.setItem('token', token);
-
+        localStorage.setItem('username', data.user.username);
+        localStorage.setItem('email', data.user.email);
         // Redirect to the desired page or perform any other action
         console.log("Redirecting to /home");
 
         navigate('/home');
+
       } else {
-        const errorData = await response.json();
+        const errorData = response.data;
         setLoginError(errorData.error);
       }
     } catch (error) {
@@ -46,15 +44,13 @@ const Login = () => {
   return (
     <div className='form-signin w-100 m-auto'>
       <form onSubmit={submit}>
-       
         <div className="patterns">
-  <svg width="100%" height="100%">
-  
- <text x="50%" y="60%"  text-anchor="middle"  >
-  Log In
- </text>
- </svg>
-</div>
+          <svg width="100%" height="100%">
+            <text x="50%" y="60%" textAnchor="middle">
+              Log In
+            </text>
+          </svg>
+        </div>
         <div className="form-floating">
           <input
             type="email"
@@ -76,7 +72,6 @@ const Login = () => {
           <label>Password</label>
         </div>
         {loginError && <Alert className="text-danger">{loginError}</Alert>}
-        
         <button className="btn btn-primary w-100 py-2" type="submit">
           Sign in
         </button>

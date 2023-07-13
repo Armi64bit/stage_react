@@ -13,31 +13,18 @@ const Nav = () => {
       setIsLoggedIn(true);
       // Fetch the user's username from the server or any other source
       // and set it in the state
-      fetchUsername();
+      // fetchUsername();
+      const storedusername = localStorage.getItem("username");
+      if (storedusername) {
+        setUsername(storedusername);
+      }
+
     }
   }, []);
 
-  const fetchUsername = async () => {
-    try {
-      // Make a request to the server to fetch the user's username
-      const response = await fetch("http://localhost:5000/api/users/username", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+  
+// const  usernamestored= localStorage.getItem("name"); 
 
-      if (response.ok) {
-        const data = await response.json();
-        setUsername(data.username);
-      } else {
-        throw new Error("Unable to fetch username"); // Handle the error case if the username cannot be fetched
-      }
-    } catch (error) {
-      console.log(error);
-      // Handle any other errors that occur during the fetch
-    }
-  };
 
   const navigate = useNavigate();
 
@@ -72,7 +59,9 @@ const Nav = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <span className="nav-link">Logged in as {username}</span>
+                   <span className="nav-link">
+    {username && username.charAt(0).toUpperCase() + username.slice(1)}
+  </span>
                 </li>
                 <li className="nav-item">
                   <button

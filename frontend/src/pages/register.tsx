@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Alert from 'react-bootstrap/Alert';
+
 interface RegisterFormData {
   username: string;
   email: string;
@@ -19,6 +19,7 @@ const Register: React.FC = () => {
     password: '',
   });
   const [registerError, setRegisterError] = useState('');
+  const [showPasswordValidation, setShowPasswordValidation] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -57,17 +58,26 @@ const Register: React.FC = () => {
     });
   };
 
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const password = e.target.value;
+    setFormData({
+      ...formData,
+      password,
+    });
+
+    const passwordValidationRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    setShowPasswordValidation(!passwordValidationRegex.test(password));
+  };
+
   return (
     <form className='form-signin w-100 m-auto' onSubmit={handleRegister}>
-      {/* <h1 className=" h3 mb-3 fw-normal">Please Sign up</h1> */}
       <div className="patterns">
-  <svg width="100%" height="100%">
-  
- <text x="50%" y="60%"  text-anchor="middle"  >
-   Sign Up
- </text>
- </svg>
-</div>
+        <svg width="100%" height="100%">
+          <text x="50%" y="60%" text-anchor="middle">
+            Sign Up
+          </text>
+        </svg>
+      </div>
       <div className="form-floating">
         <input
           type="text"
@@ -102,12 +112,22 @@ const Register: React.FC = () => {
           placeholder="Password"
           name="password"
           value={formData.password}
-          onChange={handleChange}
+          onChange={handlePasswordChange}
+          required
         />
         <label htmlFor="floatingPassword">Password</label>
+        {showPasswordValidation && (
+          <p className="text-danger">
+            Please match the requested form: Must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long.
+          </p>
+        )}
       </div>
 
-      {registerError && <Alert variant="danger">{registerError}</Alert>}
+      {registerError && (
+        <div className="alert alert-danger" role="alert">
+          {registerError}
+        </div>
+      )}
 
       <button className="w-100 btn btn-lg btn-primary" type="submit">
         Sign up

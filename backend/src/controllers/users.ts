@@ -88,19 +88,20 @@ export const login: RequestHandler<unknown, unknown, LoginBody> = async (req, re
     next(error);
   }
 };
-  
-  export const getUserByUsername: RequestHandler = async (req, res, next) => {
-    const username = req.params.username;
-  
-    try {
-      const user = await UserModel.findOne({ username }).exec();
-  
-      if (!user) {
-        throw createHttpError(404, "User not found");
-      }
-  
-      res.status(200).json(user);
-    } catch (error) {
-      next(error);
+export const getUserByEmail: RequestHandler = async (req, res, next) => {
+  const email = req.params.email;
+
+  try {
+    const user = await UserModel.findOne({ email }).exec();
+
+    if (!user) {
+      throw createHttpError.NotFound("User not found");
     }
-  };
+
+    res.json({ user });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+  

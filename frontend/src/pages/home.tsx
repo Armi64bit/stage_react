@@ -11,36 +11,23 @@ const Home = () => {
       setIsLoggedIn(true);
       // Fetch the user's username from the server or any other source
       // and set it in the state
-      fetchUsername();
+      const storedusername = localStorage.getItem("username");
+      if (storedusername) {
+        setUsername(storedusername);
+      }
     }
   }, []);
 
-  const fetchUsername = async () => {
-    try {
-      // Make a request to the server to fetch the user's username
-      const response = await fetch('http://localhost:5000/api/users/username', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUsername(data.username);
-      } else {
-        // Handle the error case if the username cannot be fetched
-      }
-    } catch (error) {
-      console.log(error);
-      // Handle any other errors that occur during the fetch
-    }
-  };
+  
 
   return (
     <div>
       {isLoggedIn ? (
-        <p>Logged in as {username}</p>
+        <p>Logged in as  {username && (
+          <strong>
+            {username.charAt(0).toUpperCase() + username.slice(1)}
+          </strong>
+        )}</p>
       ) : (
         <p>No one is logged in</p>
       )}
