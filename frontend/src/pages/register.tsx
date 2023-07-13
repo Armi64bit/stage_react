@@ -20,7 +20,14 @@ const Register: React.FC = () => {
   });
   const [registerError, setRegisterError] = useState('');
   const [showPasswordValidation, setShowPasswordValidation] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false); // New state variable
   const navigate = useNavigate();
+  const hasUppercase = /^(?=.*[A-Z])/;
+  const hasLowercase = /^(?=.*[a-z])/;
+  const hasDigit = /^(?=.*\d)/;
+  const hasSymbol = /^(?=.*[!@#$%^&*])/;
+  const minLength = /^.{8,}$/;
+  const [missingConditions, setMissingConditions] = useState<string[]>([]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +40,10 @@ const Register: React.FC = () => {
 
       // Handle successful registration
       console.log(response.data);
-      navigate('/login');
+      setRegistrationSuccess(true); // Set registration success state to true
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000); // Delay redirect to login page by 2 seconds
     } catch (error) {
       // Handle registration error
       console.error(error);
@@ -65,15 +75,32 @@ const Register: React.FC = () => {
       password,
     });
 
-    const passwordValidationRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-    setShowPasswordValidation(!passwordValidationRegex.test(password));
+    const conditions: string[] = [];
+    if (!hasUppercase.test(password)) {
+      conditions.push(" one uppercase letter");
+    }
+    if (!hasLowercase.test(password)) {
+      conditions.push(" one lowercase letter");
+    }
+    if (!hasDigit.test(password)) {
+      conditions.push(" one number");
+    }
+    if (!hasSymbol.test(password)) {
+      conditions.push(" one symbol");
+    }
+    if (!minLength.test(password)) {
+      conditions.push("at least 8 characters long");
+    }
+
+    setMissingConditions(conditions);
+    setShowPasswordValidation(conditions.length > 0);
   };
 
   return (
     <form className='form-signin w-100 m-auto' onSubmit={handleRegister}>
       <div className="patterns">
         <svg width="100%" height="100%">
-          <text x="50%" y="60%" text-anchor="middle">
+          <text x="50%" y="60%" textAnchor="middle">
             Sign Up
           </text>
         </svg>
@@ -117,15 +144,41 @@ const Register: React.FC = () => {
         />
         <label htmlFor="floatingPassword">Password</label>
         {showPasswordValidation && (
-          <p className="text-danger">
-            Please match the requested form: Must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long.
-          </p>
-        )}
+  <div className="alert alert-primary" role="alert">
+    Please match the requested form: Must contain at least
+    {missingConditions.length > 0 ? (
+      missingConditions.map((condition, index) => (
+        <div key={index}>
+          {index > 0 && <svg className="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Error:">
+  <path
+    fill="currentColor"
+    d="M16.354 8.354l-4.792 4.792 4.792 4.792a.5.5 0 0 1-.708.708l-4.792-4.792-4.792 4.792a.5.5 0 0 1-.708-.708l4.792-4.792-4.792-4.792a.5.5 0 0 1 .708-.708l4.792 4.792 4.792-4.792a.5.5 0 0 1 .708.708z"
+  />
+</svg>} {condition}
+        </div>
+      ))
+    ) : (
+      <div>
+        at least one uppercase letter, one lowercase letter, one number, and one of these symbols "!@#$%^&*"
+      </div>
+    )}
+    
+  </div>
+)}
       </div>
 
       {registerError && (
         <div className="alert alert-danger" role="alert">
           {registerError}
+        </div>
+      )}
+
+      {registrationSuccess && ( // Render the pop-up message if registration success state is true
+        <div className="alert alert-success" role="alert">
+ <svg className="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+            <use xlinkHref="#check-circle-fill"/>
+          </svg>
+          Registered successfully! Redirecting to login page...
         </div>
       )}
 
