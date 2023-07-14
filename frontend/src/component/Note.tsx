@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Card, Form } from 'react-bootstrap';
+import { Card, Form, Image } from 'react-bootstrap';
 import { Note as NoteModel } from '../models/note';
 import { AiFillCheckCircle, AiOutlineCheckCircle } from 'react-icons/ai';
 import styles from '../styles/Note.module.css';
@@ -10,12 +10,12 @@ import { MdDelete } from 'react-icons/md';
 interface NoteProps {
   note: NoteModel;
   onNoteClicked: (note: NoteModel) => void;
-  onDeleteNoteClicked: (noteId: NoteModel) => void;
+  onDeleteNoteClicked: (noteId: string) => void;
   className?: string;
 }
 
 const Note = ({ onNoteClicked, onDeleteNoteClicked, note, className }: NoteProps) => {
-  const { title, text, createdAt, updatedAt } = note;
+  const { _id, title, text, createdAt, updatedAt, images } = note;
   let createdUpdatedText: string;
   const [isDone, setIsDone] = useState(false);
   const checkboxRef = useRef<HTMLInputElement>(null);
@@ -47,12 +47,18 @@ const Note = ({ onNoteClicked, onDeleteNoteClicked, note, className }: NoteProps
           <MdDelete
             className="text-muted ms-auto"
             onClick={(e) => {
-              onDeleteNoteClicked(note);
+              onDeleteNoteClicked(_id);
               e.stopPropagation();
             }}
           />
         </Card.Title>
         <Card.Text className={`${styles.cardText} ${isDone ? styles.crossedOut : ''}`}>{text}</Card.Text>
+        <div className={styles.imageContainer}>
+          {images &&
+            images.map((image, index) => (
+              <Image key={index} src={image} alt={`Image ${index}`} className={styles.noteImage} />
+            ))}
+        </div>
       </Card.Body>
       <Card.Footer className="text-muted">{createdUpdatedText}</Card.Footer>
       <div className={styles.checkboxContainer}>
@@ -62,7 +68,7 @@ const Note = ({ onNoteClicked, onDeleteNoteClicked, note, className }: NoteProps
           checked={isDone}
           onChange={handleCheckboxChange}
           className={styles.checkbox}
-          id={`checkbox-${note._id}`}
+          id={`checkbox-${_id}`}
           label={
             <div>
               {isDone ? (

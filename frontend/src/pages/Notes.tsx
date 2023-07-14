@@ -46,26 +46,30 @@ function Notes() {
   loadNotes ();
   },[]);
   
-  async function deleteNote (note:NoteModel) {
+  async function deleteNote(noteId: string) {
     try {
-      await NoteApi.deleteNote (note._id);
-      setNotes(notes.filter((existingnote) => existingnote._id !== note._id));
+      await NoteApi.deleteNote(noteId);
+      setNotes(notes.filter((existingNote) => existingNote._id !== noteId));
     } catch (error) {
       console.log(error);
       alert(error);
     }
   }
-  const notesGrid=<Row xs={1} md={2} xl={3} className={`g-4${styles.notesGrid}`}>
   
-  {/* {JSON.stringify(notes)} */}
-  {notes.map(note => (
-    <Col key={note._id}>
-    <Note onNoteClicked={setnoteToEdit} onDeleteNoteClicked={deleteNote} note={note} className={styles.note}/>
-    </Col>
-  ))
-    }
+  const notesGrid = (
+    <Row xs={1} md={2} xl={3} className={`g-4 ${styles.notesGrid}`}>
+      {notes.map((note) => (
+        <Col key={note._id}>
+          <Note
+            onNoteClicked={setnoteToEdit}
+            onDeleteNoteClicked={() => deleteNote(note._id)}
+            note={note}
+            className={styles.note}
+          />
+        </Col>
+      ))}
     </Row>
-    
+  );
   return (<div className='App'>
     <Container className={styles.notePage}>
          <Button className={`mb-4 ${styleutils.blockCenter} ${styleutils.flexCenter}`}
