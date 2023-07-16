@@ -130,12 +130,13 @@ const AddEditNoteDialog = ({
             <div>{renderPreviewImages()}</div>
             <Button onClick={handleAddImages}>Add Images</Button>
           </Form.Group>
-          <Button type="submit" disabled={isSubmitting}>
-            Submit
-          </Button>
+         
         </Form>
       </Modal.Body>
       <Modal.Footer>
+      <Button form="addEditNoteForm" type="submit" disabled={isSubmitting}>
+            Submit
+          </Button>
         <Button variant="secondary" onClick={onDismiss}>
           Cancel
         </Button>
