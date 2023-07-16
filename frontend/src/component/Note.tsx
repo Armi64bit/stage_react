@@ -56,7 +56,7 @@ const Note = ({ onNoteClicked, onDeleteNoteClicked, note, className }: NoteProps
         <div className={styles.imageContainer}>
           {images &&
             images.map((image, index) => (
-              <Image key={index} src={image} alt={`Image ${index}`} className={styles.noteImage} />
+              <Image key={index} style={{ width: "100px", height: "100px" }} src={image} alt={`Image ${index}`} className={styles.noteImage} />
             ))}
         </div>
       </Card.Body>

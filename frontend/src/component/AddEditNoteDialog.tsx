@@ -3,7 +3,7 @@ import { Note } from "../models/note";
 import { useForm } from "react-hook-form";
 import { NoteInput } from "../network/notes_api";
 import * as NoteApi from "../network/notes_api";
-import axios from 'axios';
+import React, { ChangeEvent, useState } from "react";
 
 interface AddEditNoteDialogProps {
   noteToEdit?: Note;
@@ -34,21 +34,35 @@ const AddEditNoteDialog = ({
     }
   });
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const fileInput = event.target;
     if (fileInput.files && fileInput.files.length > 0) {
       const files = Array.from(fileInput.files);
       const imageFiles = files.map((file) => URL.createObjectURL(file));
       setValue("images", imageFiles);
+      setPreviewImages(imageFiles);
     }
   };
 
+  const removeImage = (index: number) => {
+    const images = getValues("images") || [];
+    const updatedImages = images.filter((_, i) => i !== index);
+    setValue("images", updatedImages);
+    setPreviewImages(updatedImages);
+  };
+
   const renderPreviewImages = () => {
-    const images = getValues("images");
-    if (images && images.length > 0) {
-      return images.map((image, index) => (
+    if (previewImages && previewImages.length > 0) {
+      return previewImages.map((image, index) => (
         <div key={index}>
-          <img src={image} alt={`Preview ${index + 1}`} />
+          <img
+            style={{ width: "100px", height: "100px" }}
+            src={image}
+            alt={`Preview ${index + 1}`}
+          />
+          <Button onClick={() => removeImage(index)}>Remove</Button>
         </div>
       ));
     }
@@ -72,6 +86,15 @@ const AddEditNoteDialog = ({
       console.log(error);
     }
   }
+
+  const handleAddImages = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.multiple = true;
+    input.addEventListener("change", handleImageChange as unknown as EventListener);
+    input.click();
+  };
 
   return (
     <Modal show onHide={onDismiss}>
@@ -105,13 +128,16 @@ const AddEditNoteDialog = ({
           <Form.Group className="mb-3">
             <Form.Label>Images</Form.Label>
             <div>{renderPreviewImages()}</div>
-            <Form.Control type="file" onChange={handleImageChange} multiple />
+            <Button onClick={handleAddImages}>Add Images</Button>
           </Form.Group>
+          <Button type="submit" disabled={isSubmitting}>
+            Submit
+          </Button>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button type="submit" form="addEditNoteForm" disabled={isSubmitting}>
-          Submit
+        <Button variant="secondary" onClick={onDismiss}>
+          Cancel
         </Button>
       </Modal.Footer>
     </Modal>
