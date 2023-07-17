@@ -1,12 +1,13 @@
-import { RequestHandler } from "express";
+import { RequestHandler , Request, Response, NextFunction } from "express";
 import NoteModel from "../models/note";
 import createHttpError from "http-errors";
 import mongoose  from "mongoose";
 
-export const getNotes: RequestHandler = async (req, res, next) => {
+export const getNotes: RequestHandler = async (req:AuthRequest, res, next) => {
+  const userId = req.userId; // Get the authenticated user's ID
+
   try {
-    // throw Error("Something went wrong");
-    const notes = await NoteModel.find().exec();
+    const notes = await NoteModel.find({ user: userId }).exec(); // Fetch notes associated with the user
     res.status(200).json({ notes });
   } catch (error) {
     next(error);
@@ -38,25 +39,29 @@ interface CreateNoteBody {
   images?: string[]; // Array of strings representing image URLs or paths
 }
 
-export const createNote: RequestHandler<
-  unknown,
-  unknown,
-  CreateNoteBody,
-  unknown
-> = async (req, res, next) => {
+interface AuthRequest<T = unknown, P = unknown, ReqBody = any, ResBody = any> extends Request<T, P, ReqBody, ResBody> {
+  userId?: string;
+}
+
+export const createNote: RequestHandler<unknown, unknown, CreateNoteBody, unknown> = async (
+  req: AuthRequest<unknown, unknown, CreateNoteBody>,
+  res: Response,
+  next: NextFunction
+) => {
   const { title, text, images } = req.body;
+  const userId = req.userId; // Get the authenticated user's ID
 
   try {
     if (!title) {
-      throw createHttpError(400, "Title is required");
+      throw createHttpError(400, 'Title is required');
     }
-    const newNote = await NoteModel.create({ title, text, images });
-    res.status(201).json({ message: "Note created", note: newNote });
+
+    const newNote = await NoteModel.create({ title, text, images, user: userId }); // Associate the note with the user ID
+    res.status(201).json({ message: 'Note created', note: newNote });
   } catch (error) {
     next(error);
   }
 };
-
 interface UpdateNoteParams {
   noteId: string;
 }

@@ -1,4 +1,6 @@
 import { Note } from "../models/note";
+import axiosInstance from '../utils/axiosInstance';
+
 async function fetchData(iput:RequestInfo ,inti? : RequestInit) {
     const response = await fetch(iput,inti);
     if (!response.ok) {
@@ -11,10 +13,13 @@ async function fetchData(iput:RequestInfo ,inti? : RequestInit) {
     }
 
 }
-export async function fetchNotes():Promise<Note[]>{
-    const response = await fetchData('/api/notes', {method : 'GET'});
-    return response.json();
-
+export async function fetchNotes(): Promise<Note[]> {
+  try {
+    const response = await axiosInstance.get('/api/notes');
+    return response.data.notes;
+  } catch (error) {
+    throw new Error('Failed to fetch notes');
+  }
 }
 
 export interface NoteInput{
@@ -22,19 +27,14 @@ export interface NoteInput{
     text?:string;
 }
 
-export async function createNote(note:NoteInput):Promise<Note>{
-
-const response = await fetchData('/api/notes', {
-    method : 'POST',
-    headers : {
-"Content-Type" : "application/json",
-
-    },
-    body : JSON.stringify(note),
-});
-return response.json();
+export async function createNote(note: NoteInput): Promise<Note> {
+  try {
+    const response = await axiosInstance.post('/api/notes', note);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to create note');
+  }
 }
-
 export async function updateNote (noteId: string, note: NoteInput):Promise<Note> {    
   
      const response= await fetch(`/api/notes/${noteId}`, {
@@ -50,13 +50,11 @@ export async function updateNote (noteId: string, note: NoteInput):Promise<Note>
 }
 
 export async function deleteNote (noteId: string) {
-    try {
-      await fetch(`/api/notes/${noteId}`, {
-        method: 'DELETE',
-      });
-    } catch (error) {
-      console.log(error);
-      alert(error);
-    }
+  try {
+    await axiosInstance.delete(`/api/notes/${noteId}`);
+  } catch (error) {
+    console.log(error);
+    alert(error);
   }
+}
 

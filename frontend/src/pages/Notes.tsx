@@ -9,6 +9,9 @@ import * as NoteApi from '../network/notes_api';
 import AddNoteDialog from '../component/AddEditNoteDialog';
 import {FaPlus} from 'react-icons/fa';
 import { Spinner } from 'react-bootstrap';
+import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
+
 function Notes() {
     const [notes, setNotes] = useState<NoteModel[]>([]);
  
@@ -21,30 +24,24 @@ function Notes() {
   
     const [noteToEdit, setnoteToEdit] = useState<NoteModel|null>(null);
     useEffect(() => {
-  async function loadNotes() {
-  
-    try {
-       
-      const response = await fetch('/api/notes', {method : 'GET'});
-      const notes = await response.json();
-      
-      if (Array.isArray(notes.notes)) {
-        setNotes(notes.notes);
-      } else {
-        console.error('Invalid API response format:', notes);
-        // Handle the case when the API response is not as expected
+      async function loadNotes() {
+        try {
+          const response = await axiosInstance.get('/api/notes');
+          console.log(response.data); // Log the response data object
+          
+          const notes = response.data.notes;
+          setNotes(notes);
+        } catch (error) {
+          console.log(error);
+          setshowNotesLoadingError(true);
+        } finally {
+          setNotesLoading(false);
+        }
       }
-    } catch (error) {
-      console.log(error);
-      setshowNotesLoadingError(true);
-    } finally {
-      setNotesLoading(false);
-    }
-  
-  
-  }
-  loadNotes ();
-  },[]);
+    
+      loadNotes();
+    }, []);
+    
   
   async function deleteNote(noteId: string) {
     try {
