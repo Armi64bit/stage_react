@@ -5,6 +5,7 @@ import morgan from "morgan";
 import createHttpError from "http-errors";
 import { isHttpError } from "http-errors";
 import UserRoutes from "./routes/users";
+import uploadRoute from "./routes/upload";
 import cors from "cors";
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(cors({
 // Endpoints
 app.use("/api/users", UserRoutes);
 app.use("/api/notes", notesRoutes);
+app.use("/uploads", uploadRoute);
 
 app.use((req, res, next) => {
   next(createHttpError(404, "Endpoint not found"));

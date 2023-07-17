@@ -7,25 +7,15 @@ const Nav = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   useEffect(() => {
-    // Check if the user is logged in (by checking the token in localStorage)
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
-      // Fetch the user's username from the server or any other source
-      // and set it in the state
-      // fetchUsername();
       const storedusername = localStorage.getItem("username");
       if (storedusername) {
         setUsername(storedusername);
       }
-
     }
   }, []);
-
-  
-// const  usernamestored= localStorage.getItem("name"); 
-
-
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -53,15 +43,16 @@ const Nav = () => {
           <ul className="navbar-nav ml-auto">
             {isLoggedIn ? (
               <>
-               <li className="nav-item">
+                <li className="nav-item">
                   <Link className="nav-link" to="/notes">
                     Notes{" "}
                   </Link>
                 </li>
                 <li className="nav-item">
-                   <span className="nav-link">
-    {username && username.charAt(0).toUpperCase() + username.slice(1)}
-  </span>
+                  <span className="nav-link">
+                    {username &&
+                      username.charAt(0).toUpperCase() + username.slice(1)}
+                  </span>
                 </li>
                 <li className="nav-item">
                   <button

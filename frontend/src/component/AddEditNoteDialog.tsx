@@ -4,6 +4,11 @@ import { useForm } from "react-hook-form";
 import { NoteInput } from "../network/notes_api";
 import * as NoteApi from "../network/notes_api";
 import React, { ChangeEvent, useState } from "react";
+import ImageUploadForm from './imageuploader';
+import Spinner from "react-bootstrap/Spinner";
+import { useNavigate } from "react-router-dom";
+
+
 
 interface AddEditNoteDialogProps {
   noteToEdit?: Note;
@@ -68,9 +73,12 @@ const AddEditNoteDialog = ({
     }
     return null;
   };
+  const [isSubmitting2, setIsSubmitting2] = useState(false);
+  const navigate = useNavigate();
 
   async function onSubmit(input: NoteInputWithImages) {
     try {
+
       let noteResponse: Note;
       if (noteToEdit) {
         noteResponse = await NoteApi.updateNote(noteToEdit._id, {
@@ -82,6 +90,10 @@ const AddEditNoteDialog = ({
         });
       }
       onNoteSaved(noteResponse);
+      setTimeout(() => {
+        setIsSubmitting2(false);
+        navigate("/notes");
+      }, 1500);
     } catch (error) {
       console.log(error);
     }
@@ -129,14 +141,22 @@ const AddEditNoteDialog = ({
             <Form.Label>Images</Form.Label>
             <div>{renderPreviewImages()}</div>
             <Button onClick={handleAddImages}>Add Images</Button>
+            {/* <ImageUploadForm /> */}
+
           </Form.Group>
-         
+
         </Form>
       </Modal.Body>
       <Modal.Footer>
-      <Button form="addEditNoteForm" type="submit" disabled={isSubmitting}>
+        {isSubmitting ? (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Submitting...</span>
+          </Spinner>
+        ) : (
+          <Button form="addEditNoteForm" type="submit" disabled={isSubmitting}>
             Submit
           </Button>
+        )}
         <Button variant="secondary" onClick={onDismiss}>
           Cancel
         </Button>

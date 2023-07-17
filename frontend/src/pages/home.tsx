@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
+  // window.location.reload();
 
   useEffect(() => {
     // Check if the user is logged in (e.g., by checking the token in localStorage)
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
       // Fetch the user's username from the server or any other source
@@ -18,16 +19,17 @@ const Home = () => {
     }
   }, []);
 
-  
-
   return (
     <div>
       {isLoggedIn ? (
-        <p>Logged in as  {username && (
-          <strong>
-            {username.charAt(0).toUpperCase() + username.slice(1)}
-          </strong>
-        )}</p>
+        <p>
+          Logged in as{" "}
+          {username && (
+            <strong>
+              {username.charAt(0).toUpperCase() + username.slice(1)}
+            </strong>
+          )}
+        </p>
       ) : (
         <p>No one is logged in</p>
       )}
