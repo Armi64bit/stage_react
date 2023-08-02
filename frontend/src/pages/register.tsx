@@ -86,7 +86,7 @@ const Register: React.FC = () => {
       conditions.push(" one number");
     }
     if (!hasSymbol.test(password)) {
-      conditions.push(" one symbol");
+      conditions.push(" one symbol !@#$%^&*");
     }
     if (!minLength.test(password)) {
       conditions.push("at least 8 characters long");

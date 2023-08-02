@@ -9,11 +9,7 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ path, element }) => {
   const token = localStorage.getItem('token');
 
-  return token ? (
-    <Route path={path} element={element} />
-  ) : (
-    <Navigate to="/login" replace />
-  );
+  return token ? <Route path={path} element={element} /> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;

@@ -10,11 +10,7 @@ interface PublicRouteProps {
 const PublicRoute: React.FC<PublicRouteProps> = ({ path, element, restricted }) => {
   const token = localStorage.getItem('token');
 
-  return token && restricted ? (
-    <Navigate to="/home" replace />
-  ) : (
-    <Route path={path} element={element} />
-  );
+  return restricted && token ? <Navigate to="/home" replace /> : <Route path={path} element={element} />;
 };
 
 export default PublicRoute;
