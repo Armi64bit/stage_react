@@ -109,16 +109,30 @@ const AddEditNoteDialog = ({
   };
 
   return (
-    <Modal show onHide={onDismiss}>
-      <Modal.Header closeButton>
+    <Modal show onHide={onDismiss}
+    >
+      <Modal.Header closeButton
+      style={{
+        background: "#2f3439", // Set the background color to black for dark mode
+        color: "white", // Set the text color to white for dark mode
+      }}>
         <Modal.Title>{noteToEdit ? "Edit note" : "Add Note"}</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body>
+      <Modal.Body
+      style={{
+        background: "#3a3d40", // Set the background color to black for dark mode
+        color: "white", // Set the text color to white for dark mode
+      }}
+      >
         <Form id="addEditNoteForm" onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3">
             <Form.Label>Title</Form.Label>
             <Form.Control
+            style={{
+              background: "#5b5e61", // Set the background color to black for dark mode
+              color: "white", // Set the text color to white for dark mode
+            }}
               type="text"
               placeholder="Enter title"
               isInvalid={!!errors.title}
@@ -135,6 +149,10 @@ const AddEditNoteDialog = ({
               rows={5}
               placeholder="Enter Text"
               {...register("text")}
+              style={{
+                background: "#5b5e61", // Set the background color to black for dark mode
+                color: "white", // Set the text color to white for dark mode
+              }}
             />
           </Form.Group>
           <Form.Group className="mb-3">
@@ -147,7 +165,11 @@ const AddEditNoteDialog = ({
 
         </Form>
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer
+      style={{
+        background: "#2f3439", // Set the background color to black for dark mode
+        color: "white", // Set the text color to white for dark mode
+      }}>
         {isSubmitting ? (
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Submitting...</span>

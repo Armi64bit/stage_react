@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import axios from 'axios';
+import "../styles/global.css"; // Import the CSS file for styling (create Home.css in the same directory)
 
 const Login = () => {
   const [email, setEmail] = useState('');

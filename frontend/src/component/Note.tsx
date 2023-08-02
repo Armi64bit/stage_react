@@ -6,6 +6,7 @@ import styles from '../styles/Note.module.css';
 import styleutils from '../styles/utilis.module.css';
 import { formatDate } from '../utils/formatDate';
 import { MdDelete } from 'react-icons/md';
+import { useEffect } from 'react';
 
 interface NoteProps {
   note: NoteModel;
@@ -32,9 +33,22 @@ const Note = ({ onNoteClicked, onDeleteNoteClicked, note, className }: NoteProps
 
   const handleCardClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (event.target !== checkboxRef.current) {
+         // yjib images from local storage w yhotha fil note object
+         const imagesFromStorage = localStorage.getItem(`note_images_${_id}`);
+         if (imagesFromStorage) {
+           const parsedImages = JSON.parse(imagesFromStorage) as string[];
+           note.images = parsedImages;
+         }
+
       onNoteClicked(note);
     }
   };
+  useEffect(() => {
+    // Save the images to local storage whenever the note updates
+    if (note.images) {
+      localStorage.setItem(`note_images_${_id}`, JSON.stringify(note.images));
+    }
+  }, [note.images, _id]);
 
   return (
     <Card

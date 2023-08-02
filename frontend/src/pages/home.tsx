@@ -34,7 +34,13 @@ const Home = () => {
                 <strong>
                   {username.charAt(0).toUpperCase() + username.slice(1)}
                 </strong>
+                
               )}
+               <p
+            style={{ color: 'white' }}>
+              you can see your{" "}
+              <Link to="/notes">Notes </Link>here
+            </p>
             </p>
           ) : (
             <p
