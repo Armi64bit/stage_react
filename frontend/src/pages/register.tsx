@@ -114,6 +114,7 @@ const Register: React.FC = () => {
           name="username"
           value={formData.username}
           onChange={handleChange}
+          style={{ color: 'black' }}
         />
         <label htmlFor="floatingUsername">Username</label>
       </div>
@@ -127,6 +128,8 @@ const Register: React.FC = () => {
           name="email"
           value={formData.email}
           onChange={handleChange}
+          style={{ color: 'black' }}
+          
         />
         <label htmlFor="floatingEmail">Email</label>
       </div>
@@ -140,6 +143,7 @@ const Register: React.FC = () => {
           name="password"
           value={formData.password}
           onChange={handlePasswordChange}
+          style={{ color: 'black' }}
           required
         />
         <label htmlFor="floatingPassword">Password</label>
